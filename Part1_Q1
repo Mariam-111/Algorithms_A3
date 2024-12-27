@@ -1,1 +1,54 @@
+#include <iostream>
+
+using namespace std;
+
+int main() {
+
+    int n ;
+    cout << "Enter the number of problems : \n";
+    cin >> n ;
+    int result[n] ;
+    //loop to get every problem
+    for(int j = 0 ; j < n ; j++) {
+        cout << "Enter number of coins in problem " <<  j+1 << " : \n";
+        int m , sum = 0;
+        cin >> m ;
+        int input[m];
+        cout << "Enter the coins you have : \n";
+        //loop to get input of every problem
+        for(int i = 0 ; i < m ; i++) {
+            cin >> input[i] ;
+            sum += input[i] ;
+        }
+
+        bool sol[sum] = {false}; // initialize it with false
+        int sum2coins;
+        sol[0] = true ; //take no coins
+        for(int i = 0 ; i < m ; i++) {
+            sol[input[i]] = true; //ex 1 5 >> 1+0 = 1 , 5+0 = 2
+
+            for(int k = i-1 ; k >= 0 ; k--) {
+                sum2coins = input[i] + input[k] ;
+                if(!sol[sum2coins]) { // lw b false 5leha true
+                    sol[sum2coins] = true;
+                }
+            }
+        }
+
+        int first = 0;
+        for(int i = sum/2 ; i >=0 ; i--) {
+            if(sol[i]) {
+                first = i ;
+                break;
+            }
+        }
+        result[j] = sum - (2*first) ;
+    }
+
+    // output
+    for(int i = 0 ; i < n ; i++) {
+        cout << "Problem " << i+1 << " : " << result[i] << endl;
+    }
+    return 0;
+}
 
