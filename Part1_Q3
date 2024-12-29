@@ -1,1 +1,32 @@
-
+#include <bits/stdc++.h>
+using namespace std;
+ 
+int main(){
+    vector<int> outputs;
+    int testCases;
+    cin >> testCases;
+    while (testCases--) {
+        int capacity, numOfBags;
+        cin >> capacity >> numOfBags;
+        vector<int> weights(numOfBags);
+        vector<int> values(numOfBags);
+        for (int i = 0; i < numOfBags; ++i) {
+            cin >> weights[i] >> values[i];
+        }
+        vector<vector<int>> dp(numOfBags + 1, vector<int>(capacity + 1, 0));
+        for (int i = 1; i <= numOfBags; ++i) {
+            for (int j = 0; j <= capacity; ++j) {
+                if (weights[i - 1] <= j) {
+                    dp[i][j] = max(dp[i - 1][j], dp[i - 1][j - weights[i - 1]] + values[i - 1]);
+                } else {
+                    dp[i][j] = dp[i - 1][j];
+                }
+            }
+        }
+        outputs.push_back(dp[numOfBags][capacity]);
+    }
+    for(auto o : outputs){
+        cout << "Hey stupid robber, you can get " <<  o << ".\n";
+    }
+    return 0;
+} 
