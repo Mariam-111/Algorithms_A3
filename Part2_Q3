@@ -1,1 +1,39 @@
+#include <bits/stdc++.h>
+using namespace std;
 
+int main(){
+    int n = 3;
+    vector<vector<int>> edges = {{0, 1}, {1, 2}, {2, 0}};
+    int source = 0;
+    int destination = 2;
+    if (source == destination){
+        cout << "true"<<endl;
+        return 0;
+    }
+    vector<vector<int>> graph(n);
+    for (const auto& edge : edges) {
+        graph[edge[0]].push_back(edge[1]);
+        graph[edge[1]].push_back(edge[0]);
+    }
+    queue<int> vertices;
+    vector<bool> visited(n,false);
+    vertices.push(source);
+    visited[source] = true;
+
+    while (!vertices.empty()) {
+        int current = vertices.front();
+        vertices.pop();
+        for (int adj : graph[current]) {
+            if (adj == destination) {
+                cout << "true"<<endl;
+                return 0;
+            }
+            if (!visited[adj]){
+                visited[adj] = true;
+                vertices.push(adj);
+            }
+        }
+    }
+    cout << "false"<<endl;
+    return 0;
+}
