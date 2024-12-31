@@ -1,37 +1,40 @@
+#include <bits/stdc++.h>
+using namespace std;
+
 int main(){
-    vector<char> tasks = {'A','A', 'A', 'B', 'B', 'B'};
+    vector<char> tasks = {'A','A', 'A', 'B', 'B','B'};
     int n = 2;
-    int time = 0;
-    queue<pair<int, int>> myQueue;
-    queue<int> frequencies;
-
-    unordered_map<char , int> counters;
+    unordered_map<char , int> frequencies;
     for (auto task : tasks) {
-        counters[task]++;
+        frequencies[task]++;
     }
-    vector<int> freq;
-    for (auto& entry : counters) {
-        freq.push_back(entry.second);
-    }
-    sort(freq.rbegin(), freq.rend());
-    for(auto x : freq){
-        frequencies.push(-1* x);
-    }
-    while (!frequencies.empty() || !myQueue.empty()){
-        time++;
-        if (!frequencies.empty()) {
-            int newFreq = frequencies.front() + 1;
-            frequencies.pop();
+    vector<pair<char, int>> tasksFreqs(frequencies.begin(), frequencies.end());
+    sort(tasksFreqs.begin(), tasksFreqs.end(),[](pair<char, int> a,pair<char, int> b) {
+        return a.second > b.second;
+    });
 
-            if (newFreq != 0) {
-                myQueue.push({newFreq, n + time});
+    int maxFreq = tasksFreqs[0].second ;
+    int emptySlots = (maxFreq - 1) * n ;
+    int neededSlots = (maxFreq - 1) * (n + 1) + 1 ;
+
+    for (int i = 1; i < tasksFreqs.size(); ++i) {
+        auto currentElement = tasksFreqs[i];
+        if (emptySlots == 0){
+            neededSlots+= currentElement.second;
+            continue;
+        }
+        if (currentElement.second == maxFreq){
+            emptySlots-= currentElement.second - 1;
+            neededSlots++;
+        } else{
+            if (currentElement.second <= emptySlots){
+                emptySlots-= currentElement.second;
+            } else{
+                neededSlots+= currentElement.second - emptySlots ;
+                emptySlots = 0 ;
             }
         }
-        if (time == myQueue.front().second){
-            frequencies.push(myQueue.front().first);
-            myQueue.pop();
-        }
     }
-    cout << time ;
+    cout << neededSlots ;
     return 0;
 }
