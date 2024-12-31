@@ -1,8 +1,17 @@
 #include <bits/stdc++.h>
+#define l '\n'
 using namespace std;
 
 using ll = long long;
-class DSU {
+//goal of the problem is to calculate a binary representation of the total cost of all possible paths in a graph
+//just recall for me :
+// Nodes represent cities
+// Edges represent roads, each with a cost
+// The graph forms a connected component after considering the minimum spanning tree (MST)
+// Output the total cost of all paths in binary format
+
+
+class DSU {  //Disjoint Set Union (DSU): for building the MST
 	private: int n;
 	vector < int > parent;
 	public: DSU(int n) {
@@ -28,8 +37,10 @@ class DSU {
 		return false;
 	}
 };
-vector < vector < pair < ll, ll >>> adj;
-vector < ll > childCount;
+vector < vector < pair < ll, ll >>> adj;  //Adjacency List (adj): Stores the MST structure ,,,, Each node points to its neighbors along with the edge cost
+vector < ll > childCount; //Stores the number of nodes in the subtree rooted at each node -->Calculated via a depth-first search (DFS).
+
+
 ll dfs(ll node, ll parent) {
 	ll count = 1;
 	for(auto[nbr, cost]: adj[node]) {
@@ -41,7 +52,7 @@ ll dfs(ll node, ll parent) {
 	return count;
 }
 const int MAXN = 1e6;
-vector < ll > powers(MAXN, 0);
+vector < ll > powers(MAXN, 0);  //powers[i] stores the number of paths with a cost of 2**i
 void solve() {
 	ll n, m;
 	cin >> n >> m;
@@ -110,7 +121,7 @@ void solve() {
 			cout << powers[i];
 		}
 	}
-	cout << "\n";
+	cout << l;
 }
 int main() {
 	ios_base::sync_with_stdio(false);
@@ -118,4 +129,3 @@ int main() {
 	solve();
 	return 0;
 }
-
